@@ -12,13 +12,13 @@ import {
   useRouteMatch
 } from "react-router-dom";
 import { configureStore, history } from "./redux/store/store.dev";
-import { config } from 'react-spring';
+import { config } from "react-spring";
 import { Transition } from "react-spring/renderprops";
 
+const ListingPage = React.lazy(()=> import('./examples/pageTransition/listingPage'))
+const DescriptionPage = React.lazy(()=> import('./examples/pageTransition/descriptionPage'))
 const Landing = React.lazy(() => import("./modules/landing/landing"));
-const ProjectDetailsPage = React.lazy(() =>
-  import("./modules/projectDetailsPage")
-);
+const ProjectDetailsPage = React.lazy(() => import("./modules/projectDetailsPage"));
 
 const store = configureStore();
 
@@ -27,11 +27,14 @@ const App = () => {
     <Provider store={store}>
       <ConnectedRouter history={history}>
         <Div className={styles.main_container}>
-          <Loader>
-            <Router>
-              <Suspense fallback={null}>
-                <Switch>
-                  <Route path="/">
+          <Router>
+            <Suspense fallback={null}>
+              <Switch>
+                <Route exact path="/example/pagetransition/listing"  component={ListingPage} />
+                <Route exact path="/example/pagetransition/description"  component={DescriptionPage}/>
+
+                <Route path="/">
+                  <Loader>
                     <Landing />
                     <Route
                       exact
@@ -61,12 +64,11 @@ const App = () => {
                         );
                       }}
                     />
-                  </Route>
-
-                </Switch>
-              </Suspense>
-            </Router>
-          </Loader>
+                  </Loader>
+                </Route>
+              </Switch>
+            </Suspense>
+          </Router>
         </Div>
       </ConnectedRouter>
     </Provider>
